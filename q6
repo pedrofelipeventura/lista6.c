@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Função para calcular a média
+float calcular_media(int *vetor, int tamanho) {
+    int soma = 0;
+    for (int i = 0; i < tamanho; i++) {
+        soma += vetor[i];
+    }
+    return (float) soma / tamanho;
+}
+
+// Função para comparar dois inteiros (para ordenar)
+int comparar(const void *a, const void *b) {
+    return (*(int*)a - *(int*)b);
+}
+
+// Função para calcular a mediana
+float calcular_mediana(int *vetor, int tamanho) {
+    qsort(vetor, tamanho, sizeof(int), comparar); // Ordena o vetor
+
+    if (tamanho % 2 == 0) {
+        // Média dos dois elementos centrais (caso par)
+        return (vetor[tamanho / 2 - 1] + vetor[tamanho / 2]) / 2.0;
+    } else {
+        // Elemento central (caso ímpar)
+        return vetor[tamanho / 2];
+    }
+}
+
+// Função para calcular a moda
+int calcular_moda(int *vetor, int tamanho) {
+    int max_count = 0;
+    int moda = vetor[0];
+    int count;
+
+    for (int i = 0; i < tamanho; i++) {
+        count = 0;
+        for (int j = 0; j < tamanho; j++) {
+            if (vetor[j] == vetor[i]) {
+                count++;
+            }
+        }
+        if (count > max_count) {
+            max_count = count;
+            moda = vetor[i];
+        }
+    }
+    return moda;
+}
+
+int main() {
+    int tamanho;
+
+    // Solicita o tamanho do vetor
+    printf("Digite o número de elementos do vetor: ");
+    scanf("%d", &tamanho);
+
+    // Aloca dinamicamente o vetor de inteiros
+    int *vetor = (int*) malloc(tamanho * sizeof(int));
+    if (vetor == NULL) {
+        printf("Erro ao alocar memória.\n");
+        return 1;
+    }
+
+    // Inicializa o gerador de números aleatórios
+    srand(time(NULL));
+
+    // Preenche o vetor com valores aleatórios entre 1 e 100
+    for (int i = 0; i < tamanho; i++) {
+        vetor[i] = rand() % 100 + 1; // Números entre 1 e 100
+    }
+
+    // Exibe o vetor gerado
+    printf("Vetor gerado: ");
+    for (int i = 0; i < tamanho; i++) {
+        printf("%d ", vetor[i]);
+    }
+    printf("\n");
+
+    // Calcula a média, mediana e moda
+    float media = calcular_media(vetor, tamanho);
+    float mediana = calcular_mediana(vetor, tamanho);
+    int moda = calcular_moda(vetor, tamanho);
+
+    // Exibe os resultados
+    printf("Média: %.2f\n", media);
+    printf("Mediana: %.2f\n", mediana);
+    printf("Moda: %d\n", moda);
+
+    // Libera a memória alocada
+    free(vetor);
+
+    return 0;
+}
