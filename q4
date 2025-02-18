@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Função para encontrar o valor mínimo em um vetor
+int min(int *vetor, int tamanho) {
+    int minimo = vetor[0];
+    for (int i = 1; i < tamanho; i++) {
+        if (vetor[i] < minimo) {
+            minimo = vetor[i];
+        }
+    }
+    return minimo;
+}
+
+// Função para encontrar o valor máximo em um vetor
+int max(int *vetor, int tamanho) {
+    int maximo = vetor[0];
+    for (int i = 1; i < tamanho; i++) {
+        if (vetor[i] > maximo) {
+            maximo = vetor[i];
+        }
+    }
+    return maximo;
+}
+
+// Função para normalizar os dados do vetor
+void normalizar(int *vetor, int tamanho) {
+    int minimo = min(vetor, tamanho);
+    int maximo = max(vetor, tamanho);
+
+    if (maximo != minimo) { // Verifica se o máximo é diferente do mínimo
+        for (int i = 0; i < tamanho; i++) {
+            vetor[i] = (vetor[i] - minimo) / (maximo - minimo);
+        }
+    } else {
+        printf("Todos os elementos são iguais. Não é possível normalizar.\n");
+    }
+}
+
+// Função para exibir o vetor
+void exibir_vetor(int *vetor, int tamanho) {
+    for (int i = 0; i < tamanho; i++) {
+        printf("%d ", vetor[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int tamanho;
+
+    // Solicita o tamanho do vetor
+    printf("Digite o número de elementos do vetor: ");
+    scanf("%d", &tamanho);
+
+    // Aloca dinamicamente o vetor
+    int *vetor = (int*) malloc(tamanho * sizeof(int));
+    if (vetor == NULL) {
+        printf("Erro ao alocar memória.\n");
+        return 1;
+    }
+
+    // Solicita os elementos do vetor
+    printf("Digite os elementos do vetor:\n");
+    for (int i = 0; i < tamanho; i++) {
+        scanf("%d", &vetor[i]);
+    }
+
+    // Exibe o vetor original
+    printf("Vetor original: ");
+    exibir_vetor(vetor, tamanho);
+
+    // Normaliza os dados
+    normalizar(vetor, tamanho);
+
+    // Exibe o vetor normalizado
+    printf("Vetor normalizado: ");
+    exibir_vetor(vetor, tamanho);
+
+    // Libera a memória alocada
+    free(vetor);
+
+    return 0;
+}
