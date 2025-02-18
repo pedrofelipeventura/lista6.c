@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Função para somar os elementos de um vetor
+float somar_elementos(float *vetor, int tamanho) {
+    float soma = 0.0;
+    for (int i = 0; i < tamanho; i++) {
+        soma += vetor[i];
+    }
+    return soma;
+}
+
+int main(int argc, char *argv[]) {
+    // Verifica se o número de argumentos está correto
+    if (argc != 2) {
+        printf("Uso incorreto. Por favor, forneça o número de elementos do vetor.\n");
+        return 1;
+    }
+
+    int tamanho = atoi(argv[1]);  // Obtém o tamanho do vetor a partir da linha de comando
+    if (tamanho <= 0) {
+        printf("O tamanho do vetor deve ser um número inteiro positivo.\n");
+        return 1;
+    }
+
+    // Aloca dinamicamente o vetor de float
+    float *vetor = (float*) malloc(tamanho * sizeof(float));
+    if (vetor == NULL) {
+        printf("Erro ao alocar memória.\n");
+        return 1;
+    }
+
+    // Inicializa o gerador de números aleatórios
+    srand(time(NULL));
+
+    // Preenche o vetor com valores pseudo-aleatórios entre 0.0 e 100.0
+    for (int i = 0; i < tamanho; i++) {
+        vetor[i] = (float)(rand() % 1000) / 10.0; // Números entre 0.0 e 100.0
+    }
+
+    // Exibe o vetor gerado
+    printf("Vetor gerado: ");
+    for (int i = 0; i < tamanho; i++) {
+        printf("%.2f ", vetor[i]);
+    }
+    printf("\n");
+
+    // Soma os elementos do vetor
+    float resultado = somar_elementos(vetor, tamanho);
+
+    // Exibe o resultado da soma
+    printf("A soma de todos os elementos é: %.2f\n", resultado);
+
+    // Libera a memória alocada para o vetor
+    free(vetor);
+
+    return 0;
+}
