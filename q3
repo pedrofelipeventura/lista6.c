@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Função para armazenar os endereços do menor e maior elemento
+void encontrar_menor_maior(int *vetor, int tamanho, int **enderecos) {
+    int *menor = vetor;
+    int *maior = vetor;
+
+    for (int i = 1; i < tamanho; i++) {
+        if (*(vetor + i) < *menor) {
+            menor = (vetor + i); // Atualiza o ponteiro para o menor elemento
+        }
+        if (*(vetor + i) > *maior) {
+            maior = (vetor + i); // Atualiza o ponteiro para o maior elemento
+        }
+    }
+
+    // Armazenando os endereços no vetor fornecido
+    enderecos[0] = menor;
+    enderecos[1] = maior;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Uso incorreto. Por favor, forneça o número de elementos do vetor.\n");
+        return 1;
+    }
+
+    int tamanho = atoi(argv[1]);  // Obtém o tamanho do vetor a partir da linha de comando
+    if (tamanho <= 0) {
+        printf("O tamanho do vetor deve ser um número inteiro positivo.\n");
+        return 1;
+    }
+
+    // Aloca o vetor dinamicamente
+    int *vetor = (int*) malloc(tamanho * sizeof(int));
+    if (vetor == NULL) {
+        printf("Erro ao alocar memória.\n");
+        return 1;
+    }
+
+    // Inicializa o gerador de números aleatórios
+    srand(time(NULL));
+
+    // Preenche o vetor com valores aleatórios entre 1 e 100
+    for (int i = 0; i < tamanho; i++) {
+        vetor[i] = rand() % 100 + 1; // Números entre 1 e 100
+    }
+
+    // Exibe o vetor gerado
+    printf("Vetor gerado: ");
+    for (int i = 0; i < tamanho; i++) {
+        printf("%d ", vetor[i]);
+    }
+    printf("\n");
+
+    // Aloca o vetor de endereços
+    int *enderecos[2]; // Armazena o endereço do menor e maior elemento
+
+    // Encontra os endereços do menor e maior elemento
+    encontrar_menor_maior(vetor, tamanho, enderecos);
+
+    // Exibe os endereços e os valores
+    printf("O menor elemento é %d e seu endereço é %p\n", *enderecos[0], (void*)enderecos[0]);
+    printf("O maior elemento é %d e seu endereço é %p\n", *enderecos[1], (void*)enderecos[1]);
+
+    // Libera a memória alocada para o vetor
+    free(vetor);
+
+    return 0;
+}
