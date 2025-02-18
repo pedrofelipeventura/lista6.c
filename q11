@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Função para gerar um vetor de inteiros pseudo-aleatórios no intervalo [0, N-1]
+void gerar_vetor(int *vetor, int tamanho, int N) {
+    for (int i = 0; i < tamanho; i++) {
+        vetor[i] = rand() % N; // Gera números entre 0 e N-1
+    }
+}
+
+// Função para imprimir a matriz M
+void imprimir_matriz(int **matriz, int N) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%d ", matriz[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int N, tamanho;
+
+    // Solicita o tamanho do vetor e da matriz (N)
+    printf("Digite o valor de N (tamanho do vetor e dimensao da matriz): ");
+    scanf("%d", &N);
+    printf("Digite o tamanho dos vetores X e Y: ");
+    scanf("%d", &tamanho);
+
+    // Aloca dinamicamente os vetores X e Y
+    int *X = (int *)malloc(tamanho * sizeof(int));
+    int *Y = (int *)malloc(tamanho * sizeof(int));
+
+    // Aloca dinamicamente a matriz M (NxN)
+    int **M = (int **)malloc(N * sizeof(int *));
+    for (int i = 0; i < N; i++) {
+        M[i] = (int *)malloc(N * sizeof(int));
+    }
+
+    // Inicializa o gerador de números aleatórios
+    srand(time(NULL));
+
+    // Gera os vetores X e Y
+    gerar_vetor(X, tamanho, N);
+    gerar_vetor(Y, tamanho, N);
+
+    // Inicializa a matriz M com zeros
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            M[i][j] = 0;
+        }
+    }
+
+    // Preenche a matriz de coocorrências
+    for (int i = 0; i < tamanho; i++) {
+        M[X[i]][Y[i]]++;
+    }
+
+    // Exibe os vetores X e Y
+    printf("Vetor X: ");
+    for (int i = 0; i < tamanho; i++) {
+        printf("%d ", X[i]);
+    }
+    printf("\n");
+
+    printf("Vetor Y: ");
+    for (int i = 0; i < tamanho; i++) {
+        printf("%d ", Y[i]);
+    }
+    printf("\n");
+
+    // Exibe a matriz M
+    printf("\nMatriz M de coocorrencias:\n");
+    imprimir_matriz(M, N);
+
+    // Libera a memória alocada
+    free(X);
+    free(Y);
+    for (int i = 0; i < N; i++) {
+        free(M[i]);
+    }
+    free(M);
+
+    return 0;
+}
