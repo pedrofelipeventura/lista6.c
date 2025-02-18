@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+// Funções para soma e multiplicação
+int soma(int *a, int *b) {
+    return *a + *b;
+}
+
+int multiplicacao(int *a, int *b) {
+    return *a * *b;
+}
+
+int main() {
+    int num1, num2, resultado, operacao;
+
+    // Entrada de dados
+    printf("Digite o primeiro valor: ");
+    scanf("%d", &num1);
+
+    printf("Digite o segundo valor: ");
+    scanf("%d", &num2);
+
+    printf("Digite o código da operação (1 para soma, 2 para multiplicação): ");
+    scanf("%d", &operacao);
+
+    // Realizar a operação conforme o código
+    if (operacao == 1) {
+        resultado = soma(&num1, &num2); // Chama a função soma usando ponteiros
+        printf("Resultado da soma: %d\n", resultado);
+    } else if (operacao == 2) {
+        resultado = multiplicacao(&num1, &num2); // Chama a função multiplicação usando ponteiros
+        printf("Resultado da multiplicação: %d\n", resultado);
+    } else {
+        printf("Código de operação inválido!\n");
+    }
+
+    return 0;
+}
