@@ -1,0 +1,91 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
+// Função para calcular o Erro Médio Quadrático (MSE)
+float calcular_mse(float *A, float *B, int N) {
+    float soma = 0.0;
+    for (int i = 0; i < N; i++) {
+        soma += pow(A[i] - B[i], 2); // Soma dos quadrados das diferenças
+    }
+    return soma / N; // Média dos quadrados
+}
+
+// Função para calcular o Erro Absoluto Médio (MAE)
+float calcular_mae(float *A, float *B, int N) {
+    float soma = 0.0;
+    for (int i = 0; i < N; i++) {
+        soma += fabs(A[i] - B[i]); // Soma das diferenças absolutas
+    }
+    return soma / N; // Média das diferenças absolutas
+}
+
+// Função genérica que recebe um ponteiro para a função de erro
+float calcular_erro(float *A, float *B, int N, float (*erro_func)(float*, float*, int)) {
+    return erro_func(A, B, N); // Chama a função de erro fornecida
+}
+
+int main() {
+    int N;
+    char tipo_erro;
+
+    // Solicita o número de elementos para os vetores
+    printf("Digite o número de elementos dos vetores: ");
+    scanf("%d", &N);
+
+    // Solicita o tipo de erro (MSE ou MAE)
+    printf("Escolha o tipo de erro (M para MSE, A para MAE): ");
+    scanf(" %c", &tipo_erro); // O espaço antes de %c é necessário para consumir o caractere de nova linha
+
+    // Aloca dinamicamente os vetores A e B
+    float *A = (float*) malloc(N * sizeof(float));
+    float *B = (float*) malloc(N * sizeof(float));
+    if (A == NULL || B == NULL) {
+        printf("Erro ao alocar memória.\n");
+        return 1;
+    }
+
+    // Inicializa o gerador de números aleatórios
+    srand(time(NULL));
+
+    // Preenche os vetores A e B com valores aleatórios entre 0 e 100
+    for (int i = 0; i < N; i++) {
+        A[i] = (float)(rand() % 101); // Números aleatórios entre 0 e 100
+        B[i] = (float)(rand() % 101); // Números aleatórios entre 0 e 100
+    }
+
+    // Exibe os vetores A e B
+    printf("Vetor A: ");
+    for (int i = 0; i < N; i++) {
+        printf("%.2f ", A[i]);
+    }
+    printf("\n");
+
+    printf("Vetor B: ");
+    for (int i = 0; i < N; i++) {
+        printf("%.2f ", B[i]);
+    }
+    printf("\n");
+
+    // Calcula o erro conforme a escolha do usuário
+    float erro;
+    if (tipo_erro == 'M' || tipo_erro == 'm') {
+        erro = calcular_erro(A, B, N, calcular_mse); // Chama a função de MSE
+        printf("Erro Médio Quadrático (MSE): %.2f\n", erro);
+    } else if (tipo_erro == 'A' || tipo_erro == 'a') {
+        erro = calcular_erro(A, B, N, calcular_mae); // Chama a função de MAE
+        printf("Erro Absoluto Médio (MAE): %.2f\n", erro);
+    } else {
+        printf("Opção inválida para o tipo de erro!\n");
+        free(A);
+        free(B);
+        return 1;
+    }
+
+    // Libera a memória alocada
+    free(A);
+    free(B);
+
+    return 0;
+}
