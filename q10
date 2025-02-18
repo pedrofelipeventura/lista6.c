@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Função para calcular a soma da diagonal principal
+int soma_diagonal(int **matriz, int N) {
+    int soma = 0;
+    for (int i = 0; i < N; i++) {
+        soma += matriz[i][i]; // Soma os elementos da diagonal principal
+    }
+    return soma;
+}
+
+int main() {
+    int N;
+
+    // Solicita o tamanho da matriz
+    printf("Digite o tamanho da matriz N x N: ");
+    scanf("%d", &N);
+
+    // Aloca dinamicamente a matriz NxN
+    int **matriz = (int **)malloc(N * sizeof(int *));
+    for (int i = 0; i < N; i++) {
+        matriz[i] = (int *)malloc(N * sizeof(int));
+    }
+
+    // Inicializa o gerador de números aleatórios
+    srand(time(NULL));
+
+    // Preenche a matriz com números aleatórios entre 0 e 9
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            matriz[i][j] = rand() % 10; // Números aleatórios entre 0 e 9
+        }
+    }
+
+    // Exibe a matriz gerada
+    printf("Matriz gerada:\n");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%d ", matriz[i][j]);
+        }
+        printf("\n");
+    }
+
+    // Calcula a soma da diagonal principal
+    int soma = soma_diagonal(matriz, N);
+
+    // Verifica se a soma é par ou ímpar
+    if (soma % 2 == 0) {
+        printf("\nA soma da diagonal principal eh PAR: %d\n", soma);
+    } else {
+        printf("\nA soma da diagonal principal eh IMPAR: %d\n", soma);
+    }
+
+    // Libera a memória alocada
+    for (int i = 0; i < N; i++) {
+        free(matriz[i]);
+    }
+    free(matriz);
+
+    return 0;
+}
