@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Função para binarizar a matriz M com base no limiar t
+void binarizar_matriz(int **M, int **S, int linhas, int colunas, int t) {
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            // Se M[i][j] > t, então S[i][j] = 1, senão S[i][j] = 0
+            if (M[i][j] > t) {
+                S[i][j] = 1;
+            } else {
+                S[i][j] = 0;
+            }
+        }
+    }
+}
+
+// Função para imprimir a matriz
+void imprimir_matriz(int **matriz, int linhas, int colunas) {
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            printf("%d ", matriz[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int linhas, colunas, t;
+
+    // Solicita as dimensões da matriz
+    printf("Digite o número de linhas da matriz: ");
+    scanf("%d", &linhas);
+    printf("Digite o número de colunas da matriz: ");
+    scanf("%d", &colunas);
+
+    // Solicita o valor do limiar t
+    printf("Digite o valor do limiar t: ");
+    scanf("%d", &t);
+
+    // Aloca dinamicamente as matrizes M e S
+    int **M = (int **)malloc(linhas * sizeof(int *));
+    int **S = (int **)malloc(linhas * sizeof(int *));
+    for (int i = 0; i < linhas; i++) {
+        M[i] = (int *)malloc(colunas * sizeof(int));
+        S[i] = (int *)malloc(colunas * sizeof(int));
+    }
+
+    // Inicializa o gerador de números aleatórios
+    srand(time(NULL));
+
+    // Preenche a matriz M com valores aleatórios entre 0 e 9
+    for (int i = 0; i < linhas; i++) {
+        for (int j = 0; j < colunas; j++) {
+            M[i][j] = rand() % 10; // Valores aleatórios entre 0 e 9
+        }
+    }
+
+    // Exibe a matriz M original
+    printf("Matriz M original:\n");
+    imprimir_matriz(M, linhas, colunas);
+
+    // Chama a função para binarizar a matriz M com o limiar t
+    binarizar_matriz(M, S, linhas, colunas, t);
+
+    // Exibe a matriz S binarizada
+    printf("\nMatriz S binarizada (com limiar t = %d):\n", t);
+    imprimir_matriz(S, linhas, colunas);
+
+    // Libera a memória alocada
+    for (int i = 0; i < linhas; i++) {
+        free(M[i]);
+        free(S[i]);
+    }
+    free(M);
+    free(S);
+
+    return 0;
+}
